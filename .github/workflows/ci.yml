@@ -1,4 +1,5 @@
-name: Ci (py)
+
+name: CI (Python, PHP, Java)
 
 on:
   push:
@@ -49,3 +50,21 @@ jobs:
       - name: Run PHP tests
         run: vendor/bin/phpunit
         working-directory: php-app
+
+  java:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: maven
+
+      - name: Run Java tests
+        run: mvn -B test
+        working-directory: java-app
