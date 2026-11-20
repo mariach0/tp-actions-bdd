@@ -7,96 +7,57 @@ on:
 jobs:
   python:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup PostgreSQL
-        run: bash db/setup.sh
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v4
+      - run: bash db/setup.sh
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-
-      - name: Install dependencies
-        run: pip install -r requirements.txt
+      - run: pip install -r requirements.txt
         working-directory: python-app
-
-      - name: Run tests
-        run: pytest -v
+      - run: pytest -v
         working-directory: python-app
 
   php:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup database
-        run: bash db/setup.sh
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+      - uses: actions/checkout@v4
+      - run: bash db/setup.sh
+      - uses: shivammathur/setup-php@v2
         with:
           php-version: "8.3"
           extensions: pdo, pdo_pgsql
           tools: composer, phpunit
-
-      - name: Install dependencies
-        run: composer install --no-interaction
+      - run: composer install --no-interaction
         working-directory: php-app
-
-      - name: Run PHP tests
-        run: vendor/bin/phpunit tests
+      - run: vendor/bin/phpunit tests
         working-directory: php-app
 
   java:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup database
-        run: bash db/setup.sh
-
-      - name: Setup Java
-        uses: actions/setup-java@v4
+      - uses: actions/checkout@v4
+      - run: bash db/setup.sh
+      - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: "17"
           cache: maven
-
-      - name: Run Java tests
-        run: mvn -B package
+          cache-dependency-path: java-app/pom.xml
+      - run: mvn -B package
         working-directory: java-app
 
-  nodejs:
+  node:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup PostgreSQL
-        run: bash db/setup.sh
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - run: bash db/setup.sh
+      - uses: actions/setup-node@v4
         with:
           node-version: "20"
           cache: npm
           cache-dependency-path: node-app/package-lock.json
-
-      - name: Install dependencies
-        run: npm install
-
+      - run: npm ci
         working-directory: node-app
-
-      - name: Run tests
-        run: npm test -- --runInBand
-
+      - run: npm test
         working-directory: node-app
