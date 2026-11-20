@@ -27,3 +27,25 @@ jobs:
       - name: Run tests
         run: pytest -v
         working-directory: python-app
+
+  php:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+          extensions: pdo, pdo_sqlite
+          tools: composer, phpunit
+
+      - name: Install dependencies
+        run: composer install
+        working-directory: php-app
+
+      - name: Run PHP tests
+        run: vendor/bin/phpunit
+        working-directory: php-app
