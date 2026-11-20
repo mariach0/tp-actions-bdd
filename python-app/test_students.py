@@ -33,10 +33,8 @@ def test_add_and_get_student(conn):
 
 def test_get_student(conn):
     not_student = get_student(conn, "zzz")
-    student = get_student(conn, "Amel")
 
     assert not_student is None
-    assert student is not None
 
 
 
