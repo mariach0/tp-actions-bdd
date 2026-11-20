@@ -1,7 +1,7 @@
 import pytest
 import psycopg2
 
-from students import add_student, get_student
+from students import add_student, get_student, average_grade
 
 
 @pytest.fixture
